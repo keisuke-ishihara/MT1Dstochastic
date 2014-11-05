@@ -1,6 +1,8 @@
-function [ daughter_MT ] = nucleation_MT2MT( parent_MT, time, sc)
+function [ daughter_MT ] = nucleation_MT2MT(parent_MT, time, sc)
 %NUCLEATION_MT2MT Summary of this function goes here
 %   Detailed explanation goes here
+
+global nucrate;
 
 if (parent_MT(1)==0)&&(parent_MT(2)==parent_MT(3))
     disp('input is a shrinking MT with length zero'); stop
@@ -13,7 +15,7 @@ end
 % scenario = 3;
 % 
 
-scenario = 1; nucrate = 2;   % exponential growth rate [1/min]
+scenario = sc;
 
 daughter_MT = [0 0 0];
 

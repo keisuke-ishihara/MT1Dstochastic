@@ -1,8 +1,8 @@
-clear all; close all;
+clear all;
 
 global xbin  tmax Nmax;
-xbin = 0.5:4:200;
-tmax = 20;
+xbin = 0.5:2:200;
+tmax = 10;
 Nmax = 100000;           % max number of MTs to simulate
 
 global boundarycondition nucleationscenario;
@@ -14,7 +14,7 @@ v_poly   =  8.8;    v_depoly   = 13.7;
 f_cat = 0.05*60;    f_res = 0.006*60;
 
 global nucrate;
-nucrate = 1.7;        % units 1/min
+nucrate = 2;        % units 1/min
 
 dt = 0.04;
 Ni = 500;
@@ -57,9 +57,8 @@ for i = 1:s(3)
     figure(2); hold on;
     plot(xbin, plusends, '.', 'Color', grad(i,:), 'MarkerSize', 14);
     
-    figure(3); hold on;
-    diff_polymer = minusends-plusends;
-    plot(xbin, cumsum(diff_polymer),'.', 'Color', grad(i,:), 'MarkerSize', 14);
+    figure(3);
+    plot(xbin,)
     
 end
 

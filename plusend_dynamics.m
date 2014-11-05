@@ -7,10 +7,7 @@ function [ MT_new ] = plusend_dynamics(MT, time)
 % boundarycondition = 3, disappear unless minus end is at origin, then rescue
 
 global boundarycondition plusendN xbin;
-
-v_poly = 8.8;       f_cat  = 0.05*60;
-v_depoly = 13.7;    f_res  = 0.006*60;
-
+global v_poly v_depoly f_cat f_res;
 
 if (MT(1)==0)&&(MT(2)==MT(3))
     disp('input is shrinking MT with length zero'); stop
