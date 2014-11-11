@@ -1,4 +1,4 @@
-function result = MTsimulation(Ni,dt)
+function [time, result] = MTsimulation(Ni,dt)
 
 % this code simulates individual MTs using growing and shrinking functions
 % outer loop is timestep, inner loop is MT updates
@@ -6,12 +6,10 @@ function result = MTsimulation(Ni,dt)
 %       MT(i,:) = [is(growing) pos_minusend pos_plusend]
 %
 
-tic
-
 %% specify simulation conditions
 
 global xbin tmax Nmax;
-global nucleationscenario;
+global nucleationscenario plusendN;
 
 MT = zeros(Nmax,3);    % array for storing MTs
 n_tp = 1;
@@ -24,16 +22,16 @@ MT(1:Ni,:) = [1*ones(Ni,1) 0*ones(Ni,1) 3*ones(Ni,1)];
 counter = Ni;             % keeps track no. of MTs to loop, initialize with Ni
 counter_next = 0;
 
-% array for storing simulation results at certain time intervals
+% arrays for storing simulation results at certain time intervals
 % will be 3d array
+time   = []; 
 result = MT;
 
 % simulates in forward time
 for t = dt:dt:tmax
-    
+
     % calculate the density of plus ends
-    global plusendN;
-    plusendN = hist([MT(MT(:,3)~=0, 3)], xbin);
+    plusendN = hist(MT(MT(:,3)~=0, 3), xbin);
         
     % loops through the MT array to update plus end positions
     for i = 1:counter        
@@ -62,20 +60,18 @@ for t = dt:dt:tmax
     end
     counter = counter_next; counter_next = 0;
     
-   if counter > Nmax
+    if counter > Nmax
        disp('too many MTs'); counter
        stop
-   end
-
-    if mod(t,1.5)==0
-%         plusends  = [plusends; hist(MT(any(MT,2),2),xbin)];
-%         minusends = [minusends; hist(MT(any(MT,2),3),xbin)];
+    end
+    
+    % store time and MT state every half minute
+    if mod(t,1) < dt
         n_tp = n_tp+1;
+        time(n_tp) = t;
         result(:,:,n_tp) = MT;
     end 
 
 end
-
-toc
 
 end

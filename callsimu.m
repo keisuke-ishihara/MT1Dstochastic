@@ -1,8 +1,10 @@
 clear all; close all;
 
+savepath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/';
+
 global xbin  tmax Nmax;
 xbin = 0.5:4:200;
-tmax = 20;
+tmax = 10;
 Nmax = 100000;           % max number of MTs to simulate
 
 global boundarycondition nucleationscenario depolyreg;
@@ -10,21 +12,37 @@ boundarycondition = 3;
 nucleationscenario = 1;
 depolyreg = 0;
 
-global v_poly v_depoly f_cat f_res nucrate;
+global v_poly v_depoly f_cat f_res;
 v_poly   =  8.8;    v_depoly   = 13.7; 
 f_cat = 0.05*60;    f_res = 0.006*60;
-nucrate = 1.7;        % units 1/min
-
 
 dt = 0.04;
 Ni = 500;
 
-result = MTsimulation(Ni, dt);
+% nucrates = 1;
+nucrates = 0:0.2:1;
+
+for i = 1:length(nucrates)
+    global nucrate
+    nucrate = nucrates(i);
+    
+    tic
+    [time, result] = MTsimulation(Ni, dt);
+    toc
+    
+    filename = strcat(savepath, 'sim', sprintf('%04.0f',i));
+    save(filename);
+    
+end
 
 % J = (v_poly*f_res - v_depoly*f_cat)/(f_cat+f_res);
 % D = v_poly*v_depoly/(f_cat+f_res);
 % tau =4*D/J^2;
 % L = D/abs(J);
+
+
+stop
+
 
 %% plot length distribution
 
