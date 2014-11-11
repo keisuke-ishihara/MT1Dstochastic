@@ -6,7 +6,7 @@ function [ MT_new ] = plusend_dynamics(MT, time)
 % boundarycondition = 2, disappear
 % boundarycondition = 3, disappear unless minus end is at origin, then rescue
 
-global boundarycondition plusendN xbin;
+global boundarycondition depolyreg plusendN xbin;
 global v_poly v_depoly f_cat f_res;
 
 if (MT(1)==0)&&(MT(2)==MT(3))
@@ -33,11 +33,13 @@ elseif MT(1) == 0
         
     if t_depoly > time
         
-%         y = hist(MT(3), xbin);
-%         index = sum((1:length(xbin)).*y);
-%         v_depoly_mod = v_depoly+36*plusendN(index)/(100+plusendN(index));
-
-        v_depoly_mod = v_depoly;
+        if depolyreg == 1
+            y = hist(MT(3), xbin);
+            index = sum((1:length(xbin)).*y);
+            v_depoly_mod = v_depoly+36*plusendN(index)/(100+plusendN(index));
+        else
+            v_depoly_mod = v_depoly;
+        end
         
         if MT(3)-MT(2)-v_depoly_mod*time < 0
             if boundarycondition == 1

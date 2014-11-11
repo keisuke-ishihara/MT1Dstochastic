@@ -5,16 +5,16 @@ xbin = 0.5:4:200;
 tmax = 20;
 Nmax = 100000;           % max number of MTs to simulate
 
-global boundarycondition nucleationscenario;
+global boundarycondition nucleationscenario depolyreg;
 boundarycondition = 3;
 nucleationscenario = 1;
+depolyreg = 0;
 
-global v_poly v_depoly f_cat f_res;
-v_poly   =  8.8;    v_depoly   = 13.7;
+global v_poly v_depoly f_cat f_res nucrate;
+v_poly   =  8.8;    v_depoly   = 13.7; 
 f_cat = 0.05*60;    f_res = 0.006*60;
-
-global nucrate;
 nucrate = 1.7;        % units 1/min
+
 
 dt = 0.04;
 Ni = 500;
