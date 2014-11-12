@@ -20,14 +20,17 @@ dt = 0.04;
 Ni = 500;
 
 % nucrates = 1;
-nucrates = 0:0.2:4.0;
+nucrates = 0:0.2:1.8;
+nucrates = repmat(nucrates,1,100);
 
+tic
 for i = 1:length(nucrates)
     global nucrate
     nucrate = nucrates(i);
     
-    tic
+    
     [time, result] = MTsimulation(Ni, dt);
+    i
     toc
     
     filename = strcat(savepath, 'sim', sprintf('%04.0f',i));
