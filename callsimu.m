@@ -4,7 +4,7 @@ savepath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/';
 
 global xbin  tmax Nmax;
 xbin = 0.5:4:200;
-tmax = 10;
+tmax = 20;
 Nmax = 100000;           % max number of MTs to simulate
 
 global boundarycondition nucleationscenario depolyreg;
@@ -20,7 +20,7 @@ dt = 0.04;
 Ni = 500;
 
 % nucrates = 1;
-nucrates = 0:0.2:1;
+nucrates = 0:0.2:4.0;
 
 for i = 1:length(nucrates)
     global nucrate

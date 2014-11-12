@@ -62,6 +62,8 @@ for t = dt:dt:tmax
     
     if counter > Nmax
        disp('too many MTs'); counter
+       plusends = hist(MT(any(MT,2),3),xbin);
+       plot(xbin, plusends);
        stop
     end
     
