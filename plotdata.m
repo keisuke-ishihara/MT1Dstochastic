@@ -68,6 +68,21 @@ for i4ep = 1:s(1)
 end
 legend(leg);
 
+%% for plotting a timecourse
+
+fig_timecoursemean = figure(3);
+
+% collect data points and add them into a row in a matrix
+accum = zeros(s(1),50);
+for i4ep = 9:10:1000
+
+    load(strcat(datapath,files(i4ep).name));
+    MT = result(:,:,);
+    plusends  = hist(MT(any(MT,2),3),xbin);
+    accum(mod(i4ep-1,10)+1,:) = accum(mod(i4ep-1,10)+1,:) + plusends;
+    
+end
+
 % axis([0 200 0 700])
 % set(gca,'XTick',0:40:160)
 % set(gca,'YTick',0:500:2000)
