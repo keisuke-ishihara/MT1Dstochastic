@@ -81,7 +81,7 @@ for i4ep = 9:10:1000
     plusends  = hist(MT(any(MT,2),3),xbin);
     accum(mod(i4ep-1,10)+1,:) = accum(mod(i4ep-1,10)+1,:) + plusends;
     
-end
+end.
 
 % axis([0 200 0 700])
 % set(gca,'XTick',0:40:160)

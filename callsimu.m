@@ -3,13 +3,14 @@ clear all; close all;
 savepath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/';
 
 global xbin  tmax Nmax;
-xbin = 0.5:4:200;
+xbin = 0.5:4:200;       % the bin could be a bit finer...
 tmax = 20;
 Nmax = 100000;           % max number of MTs to simulate
+Nmax = 20;           % max number of MTs to simulate
 
 global boundarycondition nucleationscenario depolyreg;
 boundarycondition = 3;
-nucleationscenario = 1;
+nucleationscenario = 2;
 depolyreg = 0;
 
 global v_poly v_depoly f_cat f_res;
@@ -17,11 +18,12 @@ v_poly   =  8.8;    v_depoly   = 13.7;
 f_cat = 0.05*60;    f_res = 0.006*60;
 
 dt = 0.04;
-Ni = 500;
+% Ni = 500;
+Ni = 10;
 
-% nucrates = 1;
+% nucrates = 2;
 nucrates = 0:0.2:1.8;
-nucrates = repmat(nucrates,1,100);
+nucrates = repmat(nucrates,1,1);
 
 tic
 for i = 1:length(nucrates)

@@ -33,10 +33,14 @@ elseif MT(1) == 0
         
     if t_depoly > time
         
+        % regulation of depolymerization
         if depolyreg == 1
-            y = hist(MT(3), xbin);
+            y = hist(MT(3), xbin);              
             index = sum((1:length(xbin)).*y);
-            v_depoly_mod = v_depoly+36*plusendN(index)/(100+plusendN(index));
+            density = plusendN(index);
+            
+            % Michaelian function that increase depolymerization rate
+            v_depoly_mod = v_depoly+36*density/(100+density);
         else
             v_depoly_mod = v_depoly;
         end
