@@ -26,13 +26,10 @@ if nucleationscenario == 1
     
 elseif nucleationscenario == 2
     
-    L = MT(3)-MT(2);    % length of parent MT
-    
-    if exprnd(1/nucrate/L) < time
-        % nucrate is rate per MT length
-        % daughter is born at equal probability along parent
-        pos = unifrnd(parent_MT(2), parent_MT(3));
-        daughter_MT = [1 pos pos];
+    L = MT(3)-MT(2)
+    if exprnd(1/nucrate) < time
+        % bifurcation of plus-end occurs both growing&shrinking
+        daughter_MT = [1 parent_MT(3) parent_MT(3)];
     end
     
 end
