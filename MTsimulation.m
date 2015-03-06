@@ -8,8 +8,9 @@ function [time, result] = MTsimulation(Ni,dt)
 
 %% specify simulation conditions
 
-global xbin tmax Nmax;
-global depolyreg nucleationscenario plusendN mtN;
+global xbin tmax Nmax plusendCap mtCap;
+global depolyreg nucleationscenario;
+global plusendRho mtRho;
 
 MT = zeros(Nmax,3);    % array for storing MTs
 n_tp = 1;
@@ -30,14 +31,14 @@ result = MT;
 % simulates in forward time
 for t = dt:dt:tmax
     
-    % number of plus-ends in spatial bin, centered around val of xbin
+    % plus-end densities in spatial bin, centered around val of xbin
     if depolyreg == 1
-        plusendN = hist(MT(MT(:,3)~=0, 3), xbin);
+        plusendRho = (hist(MT(MT(:,3)~=0, 3), xbin))/plusendCap;
     end
     
-    % calculate the number of MTs in spatial bin
-    if (nucleationscenario == 2)||(nucleationscenario == 3)
-        mtN = zeros(1, length(xbin));
+    % MT densities in spatial bin
+    if nucleationscenario == 3
+        mtRho = zeros(1, length(xbin));
         for i = 1:counter
             minusendbin = hist(MT(i,2), xbin).*(1:length(xbin));
             plusendbin  = hist(MT(i,3), xbin).*(1:length(xbin));  
@@ -47,9 +48,10 @@ for t = dt:dt:tmax
                % assumption: MT shorter than bin size does not contribute
                add = zeros(1, length(xbin));
                add(minusendbin:plusendbin) = 1;
-               mtN = mtN + add;
+               mtRho = mtRho + add;
             end            
         end
+        mtRho = mtRho/mtCap;
     end
         
     % loops through the MT array to update plus end positions

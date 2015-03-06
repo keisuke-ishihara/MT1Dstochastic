@@ -2,7 +2,9 @@ function [ daughter_MT ] = nucleation_MT2MT(parent_MT, time)
 %NUCLEATION_MT2MT Summary of this function goes here
 %   Detailed explanation goes here
 
-global nucrate nucleationscenario mtN;
+global xbin;
+global nucleationscenario nucrate;
+global plusendRho mtRho;
 
 if (parent_MT(1)==0)&&(parent_MT(2)==parent_MT(3))
     disp('input is a shrinking MT with length zero'); stop
@@ -10,27 +12,47 @@ end
 
 % consider different scenarios for MT-stimulated MT nucleation
 % 
-% scenario = 1;   plus-end bifurcation, new growing MT of length zero
-% scenario = 2;   dep on MT local polymer density, no saturation
-% scenario = 3;   dep on MT local polymer density, logistic
+% scenario = 1;   plus-end bifurcation
+% scenario = 2;   plus-end bifurcation with saturation to local plusendRho
+% scenario = 3;   MT polymer stimulated nucleation
+% scenario = 4;   MT polymer with saturation to local mtRho
 % 
+% assumption: time step is small enough, only one nucleation per parent MT
+%
 
 daughter_MT = [0 0 0];
 
 if nucleationscenario == 1
     
     if exprnd(1/nucrate) < time
-        % bifurcation of plus-end occurs both growing&shrinking
         daughter_MT = [1 parent_MT(3) parent_MT(3)];
     end
     
 elseif nucleationscenario == 2
     
+    % parent_MT plusend position defines local
+    index = hist(parent_MT(3), xbin).*(1:length(xbin));
+    
+    if exprnd(1/nucrate/(1-plusendRho(index))) < time
+        daughter_MT = [1 parent_MT(3) parent_MT(3)];
+    end
+
+elseif nucleationscenario == 3
+    
     L = MT(3)-MT(2);    % length of parent MT
     
     if exprnd(1/nucrate/L) < time
-        % nucrate is rate per MT length
-        % daughter is born at equal probability along parent
+        pos = unifrnd(parent_MT(2), parent_MT(3));
+        daughter_MT = [1 pos pos];
+    end
+    
+elseif nucleationscenario == 4
+    
+    % this needs work here!! not trivial
+    index = hist(parent_MT(3), xbin).*(1:length(xbin));
+    L = MT(3)-MT(2);    % length of parent MT
+    
+    if exprnd(1/nucrate/L//(1-mtRho)) < time
         pos = unifrnd(parent_MT(2), parent_MT(3));
         daughter_MT = [1 pos pos];
     end
