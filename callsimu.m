@@ -9,7 +9,7 @@ Nmax = 100000;           % max number of MTs to simulate
 Nmax = 20;           % max number of MTs to simulate
 
 global plusendCap mtCap;
-%define carrying caps
+% define carrying caps
 
 global boundarycondition nucleationscenario depolyreg;
 boundarycondition = 3;

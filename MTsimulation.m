@@ -12,6 +12,9 @@ global xbin tmax Nmax plusendCap mtCap;
 global depolyreg nucleationscenario;
 global plusendRho mtRho;
 
+calcplusendRho = (depolyreg==1)|(nucleationscenario==2);
+calcmtRho = (depolyreg==2)|(nucleationscenario==4);
+
 MT = zeros(Nmax,3);    % array for storing MTs
 n_tp = 1;
 
@@ -32,12 +35,12 @@ result = MT;
 for t = dt:dt:tmax
     
     % plus-end densities in spatial bin, centered around val of xbin
-    if depolyreg == 1
+    if calcplusendRho
         plusendRho = (hist(MT(MT(:,3)~=0, 3), xbin))/plusendCap;
     end
     
     % MT densities in spatial bin
-    if nucleationscenario == 3
+    if calcmtRho
         mtRho = zeros(1, length(xbin));
         for i = 1:counter
             minusendbin = hist(MT(i,2), xbin).*(1:length(xbin));
@@ -70,16 +73,20 @@ for t = dt:dt:tmax
     counter = counter_next;
             
     % loops through the MT array to nucleate MT
-    for i = 1:counter       
-               
-        daughter = nucleation_MT2MT(MT(i,:),dt,nucleationscenario);
-        % keep daughter unless it is [0 0 0]
-        if any(daughter)
-            counter_next = counter_next + 1;
-            MT(counter_next,:) = daughter;
+    if nucleationscenario ~= 0
+        for i = 1:counter       
+            daughter = nucleation_MT2MT(MT(i,:),dt,nucleationscenario);
+            % keep daughter unless it is [0 0 0]
+            if any(daughter)
+                counter_next = counter_next + 1;
+                MT(counter_next,:) = daughter;
+            end
         end
+        counter = counter_next;
     end
-    counter = counter_next; counter_next = 0;
+    
+    
+    counter_next = 0;
     
     if counter > Nmax
        disp('too many MTs'); counter
