@@ -21,7 +21,7 @@ n_tp = 1;
 %% run simulation
 
 % initialize MT array
-MT(1:Ni,:) = [1*ones(Ni,1) 0.5*ones(Ni,1) 5*ones(Ni,1)];
+MT(1:Ni,:) = [1*ones(Ni,1) 0*ones(Ni,1) 5*ones(Ni,1)];
 
 counter = Ni;             % keeps track no. of MTs to loop, initialize with Ni
 counter_next = 0;
@@ -75,7 +75,7 @@ for t = dt:dt:tmax
     % loops through the MT array to nucleate MT
     if nucleationscenario ~= 0
         for i = 1:counter       
-            daughter = nucleation_MT2MT(MT(i,:),dt,nucleationscenario);
+            daughter = nucleation_MT2MT(MT(i,:),dt);
             % keep daughter unless it is [0 0 0]
             if any(daughter)
                 counter_next = counter_next + 1;
@@ -89,7 +89,9 @@ for t = dt:dt:tmax
     counter_next = 0;
     
     if counter > Nmax
-       disp('too many MTs'); counter
+       disp('too many MTs');
+       Nmax
+       counter
        plusends = hist(MT(any(MT,2),3),xbin);
        plot(xbin, plusends);
        stop

@@ -2,7 +2,7 @@
 
 clear all; close all;
 
-datapath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata';
+datapath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/';
 
 % datapath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/20141111_vregoff_alpha0to1.9/';
 % datapath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/20141111_vregon_alpha0to2.6/';
@@ -67,6 +67,8 @@ for i4ep = 1:s(1)
     leg = [leg; 'alpha = ', sprintf('%1.1f',nucrates(i4ep))]
 end
 legend(leg);
+
+stop
 
 %% for plotting a timecourse
 

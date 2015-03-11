@@ -32,8 +32,9 @@ elseif nucleationscenario == 2
     
     % parent_MT plusend position defines local
     index = hist(parent_MT(3), xbin).*(1:length(xbin));
-    
-    if exprnd(1/nucrate/(1-plusendRho(index))) < time
+    index(index(:)==0) = [];
+    cof = min(plusendRho(index),1);
+    if exprnd(1/nucrate/abs((1-cof))) < time
         daughter_MT = [1 parent_MT(3) parent_MT(3)];
     end
 
@@ -46,16 +47,16 @@ elseif nucleationscenario == 3
         daughter_MT = [1 pos pos];
     end
     
-elseif nucleationscenario == 4
-    
-    % this needs work here!! not trivial
-    index = hist(parent_MT(3), xbin).*(1:length(xbin));
-    L = MT(3)-MT(2);    % length of parent MT
-    
-    if exprnd(1/nucrate/L//(1-mtRho)) < time
-        pos = unifrnd(parent_MT(2), parent_MT(3));
-        daughter_MT = [1 pos pos];
-    end
+% elseif nucleationscenario == 4
+%     
+%     % this needs work here!! not trivial
+%     index = hist(parent_MT(3), xbin).*(1:length(xbin));
+%     L = MT(3)-MT(2);    % length of parent MT
+%     
+%     if exprnd(1/nucrate/L//(1-mtRho)) < time
+%         pos = unifrnd(parent_MT(2), parent_MT(3));
+%         daughter_MT = [1 pos pos];
+%     end
     
 end
 
