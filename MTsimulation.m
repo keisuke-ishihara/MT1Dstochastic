@@ -67,8 +67,7 @@ for t = dt:dt:tmax
         if ~((updated(1)==0)&&(updated(2)==updated(3)))
             counter_next = counter_next + 1;
             MT(counter_next,:) = updated;
-        end 
-        
+        end       
     end
     counter = counter_next;
             
