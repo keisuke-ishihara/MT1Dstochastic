@@ -6,21 +6,24 @@ function [time, result] = MTsimulation(Ni,dt)
 %       MT(i,:) = [is(growing) pos_minusend pos_plusend]
 %
 
-%% specify simulation conditions
+%% Step 0: specify simulation conditions
 
 global xbin tmax Nmax plusendCap mtCap;
 global depolyreg nucleationscenario;
 global plusendRho mtRho;
 
-calcplusendRho = (depolyreg==1)|(nucleationscenario==2);
-calcmtRho = (depolyreg==2)|(nucleationscenario==4);
+needplusendRho = (depolyreg==1)|(nucleationscenario==2);
+needmtRho = (depolyreg==2)|(nucleationscenario==4);
 
-MT = zeros(Nmax,3);    % array for storing MTs
-n_tp = 1;
+MT = zeros(Nmax,3);    % array for storing MTs for timepoints
+curr_tp = 1;           % no. of timepoints for data storage
 
-%% run simulation
+%
+% run simulation
+%
 
-% initialize MT array
+%% Step 1: initialization of MT array
+
 MT(1:Ni,:) = [1*ones(Ni,1) 0*ones(Ni,1) 5*ones(Ni,1)];
 
 counter = Ni;             % keeps track no. of MTs to loop, initialize with Ni
@@ -28,38 +31,26 @@ counter_next = 0;
 
 % arrays for storing simulation results at certain time intervals
 % will be 3d array
-time   = []; 
+time   = [0]; 
 result = MT;
 
-% simulates in forward time
+%% Step 2: simulates in forward time
+
 for t = dt:dt:tmax
     
-    % plus-end densities in spatial bin, centered around val of xbin
-    if calcplusendRho
-        plusendRho = (hist(MT(MT(:,3)~=0, 3), xbin))/plusendCap;
-    end
+    % first, apply plus end dynamics
     
-    % MT densities in spatial bin
-    if calcmtRho
-        mtRho = zeros(1, length(xbin));
-        for i = 1:counter
-            minusendbin = hist(MT(i,2), xbin).*(1:length(xbin));
-            plusendbin  = hist(MT(i,3), xbin).*(1:length(xbin));  
-            minusendbin(minusendbin==0) = [];
-            plusendbin(plusendbin==0) = [];
-            if minusendbin ~= plusendbin
-               % assumption: MT shorter than bin size does not contribute
-               add = zeros(1, length(xbin));
-               add(minusendbin:plusendbin) = 1;
-               mtRho = mtRho + add;
-            end            
-        end
-        mtRho = mtRho/mtCap;
+    % calculate densities if necessary
+    if needplusendRho 
+        plusendRho = calcplusendRho(MT);
+    end
+    if needmtRho
+        mtRho = calcmtRho(MT,counter);
     end
         
-    % loops through the MT array to update plus end positions
+    % loop through the MT array to update plus end positions
     for i = 1:counter        
-        
+ 
         updated = plusend_dynamics(MT(i,:),dt);
         MT(i,:) = [0 0 0];
         
@@ -68,9 +59,13 @@ for t = dt:dt:tmax
             counter_next = counter_next + 1;
             MT(counter_next,:) = updated;
         end       
+        
     end
     counter = counter_next;
-            
+    
+    
+    % next, nucleate microtubules
+    
     % loops through the MT array to nucleate MT
     if nucleationscenario ~= 0
         for i = 1:counter       
@@ -83,24 +78,25 @@ for t = dt:dt:tmax
         end
         counter = counter_next;
     end
+  
     
-    
+    % initialize counter_next before next time loop, just in case
     counter_next = 0;
     
+    % check if there are too many MTs in the system
     if counter > Nmax
        disp('too many MTs');
        Nmax
        counter
-       plusends = hist(MT(any(MT,2),3),xbin);
-       plot(xbin, plusends);
+       plusends = hist(MT(any(MT,2),3),xbin); plot(xbin, plusends);
        stop
     end
     
-    % store time and MT state every half minute
+    % finally, store time and MT state every half minute
     if mod(t,1) < dt
-        n_tp = n_tp+1;
-        time(n_tp) = t;
-        result(:,:,n_tp) = MT;
+        curr_tp = curr_tp+1;
+        time(curr_tp) = t;
+        result(:,:,curr_tp) = MT;
     end 
 
 end
