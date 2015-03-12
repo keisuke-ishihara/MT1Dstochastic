@@ -34,7 +34,7 @@ elseif nucleationscenario == 2
     index = hist(parent_MT(3), xbin).*(1:length(xbin));
     index(index(:)==0) = [];
     cof = min(plusendRho(index),0.9999999);
-    if exprnd(1/nucrate/abs((1-cof))) < time
+    if exprnd(1/nucrate/(1-cof)) < time
         daughter_MT = [1 parent_MT(3) parent_MT(3)];
     end
 

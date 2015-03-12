@@ -11,7 +11,7 @@ Nmax = 100000;           % max number of MTs to simulate
 
 global plusendCap mtCap;
 % define carrying capacities so density is robust to xbinwidth
-plusendCap = 10/xbinwidth;
+plusendCap = 100/xbinwidth;
 mtCap      = 10/xbinwidth; 
 
 global boundarycondition nucleationscenario depolyreg;
@@ -25,16 +25,18 @@ f_cat = 0.05*60;    f_res = 0.006*60;
 
 dt = 0.04;
 % Ni = 500;
-Ni = 10;
+Ni = 100;
 
-% nucrates = 0:0.2:1.8;
-nucrates = 0:1:4;
-nucrates = repmat(nucrates,1,10);
+nucrates = (0:1:4)';
+% nucrates = 0:1:4;
+n_rep = 10;
+nucrates = repmat(nucrates,1,n_rep);
 
 tic
-for i = 1:length(nucrates)
+for i = 1:length(nucrates(:))
     global nucrate
-    nucrate = nucrates(i);
+    lin = nucrates(:);
+    nucrate = lin(i);
     
     [time, result] = MTsimulation(Ni, dt);
     i

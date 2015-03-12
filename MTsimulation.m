@@ -1,8 +1,7 @@
 function [time, result] = MTsimulation(Ni,dt)
 
 % this code simulates individual MTs using growing and shrinking functions
-% outer loop is timestep, inner loops are MT updates
-%
+% 
 %       MT(i,:) = [is(growing) pos_minusend pos_plusend]
 %
 
@@ -38,6 +37,7 @@ result = MT;
 
 for t = dt:dt:tmax
     
+    
     % first, apply plus end dynamics
     
     % calculate densities if necessary
@@ -66,7 +66,15 @@ for t = dt:dt:tmax
     
     % next, nucleate microtubules
     
-    % loops through the MT array to nucleate MT
+    % re-calculate densities if necessary
+    if needplusendRho 
+        plusendRho = calcplusendRho(MT);
+    end
+    if needmtRho
+        mtRho = calcmtRho(MT,counter);
+    end
+    
+    % loop through the MT array to nucleate MT
     if nucleationscenario ~= 0
         for i = 1:counter       
             daughter = nucleation_MT2MT(MT(i,:),dt);
