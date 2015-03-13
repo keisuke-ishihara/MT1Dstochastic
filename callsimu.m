@@ -2,7 +2,7 @@ clear all; close all;
 
 savepath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/';
 
-global xbin  tmax Nmax;
+global xbin xbinwidth tmax Nmax;
 xbinwidth = 4;              % in microns
 xbin = 0:xbinwidth:200;   
 tmax = 20;
@@ -11,12 +11,13 @@ Nmax = 100000;           % max number of MTs to simulate
 
 global plusendCap mtCap;
 % define carrying capacities so density is robust to xbinwidth
+% the numerator defines the number of MTs in the simulation
 plusendCap = 50/xbinwidth;
-mtCap      = 10/xbinwidth; 
+mtCap      = 50/xbinwidth; 
 
 global boundarycondition nucleationscenario depolyreg;
 boundarycondition = 3;
-nucleationscenario = 2;
+nucleationscenario = 4;
 depolyreg = 0;
 
 global v_poly v_depoly f_cat f_res;
@@ -25,10 +26,10 @@ f_cat = 0.05*60;    f_res = 0.006*60;
 
 dt = 0.04;
 % Ni = 500;
-Ni = 100;
+Ni = 50;
 
-nucrates = (0:1:3)';
-% nucrates = 0:1:4;
+nucrates = (0:0.4:2)';
+% nucrates = (0:1:3)';
 n_rep = 5;
 nucrates = repmat(nucrates,1,n_rep);
 
@@ -52,9 +53,7 @@ end
 % tau =4*D/J^2;
 % L = D/abs(J);
 
-
 stop
-
 
 %% plot length distribution
 

@@ -17,9 +17,6 @@ needmtRho = (depolyreg==2)|(nucleationscenario==4);
 MT = zeros(Nmax,3);    % array for storing MTs for timepoints
 curr_tp = 1;           % no. of timepoints for data storage
 
-%
-% run simulation
-%
 
 %% Step 1: initialization of MT array
 
@@ -80,24 +77,25 @@ for t = dt:dt:tmax
         % generate new MTs
         newMTs = [];
         for j = 1:length(xbin)
-            new = nucleation_spatial(xbin,j,dt);
-            newMTs =[newMTs new];
+            new = nucleation_spatial(xbin,j,dt);            
+            newMTs =[newMTs; new];
         end
-        
+     
         % add new MTs to system
         s_newMTs = size(newMTs);
-        if s_newMTs(1) > 1
-            if counter+s_newMTs(1) > Nmax
+        nnew = s_newMTs(1);
+        if nnew > 1
+            if counter+nnew > Nmax
                 disp('too many MTs nucleated'); stop
             else
-                % somthing is wrong here?????
-                MT((counter+1):(counter+s_newMTs(1)), :) = newMTs;
-                counter = counter + s_newMTs(1);
+                MT((counter+1):(counter+nnew), :) = newMTs;
+                counter = counter + nnew;
             end
         end
         
     end
     
+% %     newMTs2 = [];
 %     % loop through the MT array to nucleate MT
 %     if nucleationscenario ~= 0
 %         
@@ -115,11 +113,25 @@ for t = dt:dt:tmax
 %             if any(daughter)
 %                 counter_next = counter_next + 1;
 %                 MT(counter_next,:) = daughter;
+% %                 newMTs2 =[newMTs2; daughter];
 %             end
 %         end
 %         counter = counter_next;
 %     end
-    
+%     
+%     if ~exist('rs')
+%         rs = [];
+%     end
+%     if ~isempty(newMTs)
+%         newMTs
+%         newMTs2
+%         
+%         tempa = size(newMTs);
+%         tempb = size(newMTs2);
+%         rs = [rs tempb/tempa];
+%         mean(rs)
+%         std(rs)
+%     end
     
 %     % check if there are too many MTs in the system
 %     if counter > Nmax

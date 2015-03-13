@@ -1,7 +1,5 @@
 function [ newMTs ] = nucleation_spatial( xbin, j, time )
-%NUCLEATION_SPATIAL Summary of this function goes here
-%   Detailed explanation goes here
-%
+%NUCLEATION_SPATIAL 
 % consider different scenarios for MT-stimulated MT nucleation
 % 
 % scenario = 1;   plus-end bifurcation
@@ -12,21 +10,21 @@ function [ newMTs ] = nucleation_spatial( xbin, j, time )
 
 global nucleationscenario nucrate;
 global plusendRho mtRho;
-global plusendCap mtCap;
+global plusendCap mtCap xbinwidth;
 
 % lambda: the rate of nucleation in a given position
 
 if nucleationscenario == 1
     lambda = nucrate*plusendCap*plusendRho(j);
 elseif nucleationscenario == 2
-    lambda = nucrate*plusendCap*plusendRho(j)*max(1-plusendRho(j), 0);
+    lambda = nucrate*plusendCap*xbinwidth*plusendRho(j)*max(1-plusendRho(j), 0);
 elseif nucleationscenario == 3
     lambda = nucrate*mtCap*mtRho(j);
 elseif nucleationscenario == 4
-    lambda = nucrate*mtCap*mtRho(j)*max(1-mtRho(j), 0);
+    lambda = nucrate*mtCap*xbinwidth*mtRho(j)*max(1-mtRho(j), 0);
 end
 
-halfw = (xbin(2)-xbin(1))/2;
+halfw = 0.5*xbinwidth;
 L_bin = max(xbin(j)-halfw, min(xbin));   % left boundary of bin
 R_bin = min(xbin(j)+halfw, max(xbin));   % right boundary of bin
 
