@@ -15,10 +15,7 @@ cd(old);
 set(0,'DefaultAxesFontSize', 16)
 set(0, 'DefaultFigurePosition', [10 10 600 450]);
 
-fig_endpoint = figure(1);
-
-s = size(files);
-
+% fig_endpoint = figure(1);
 
 %% for plotting individual simulations
 % for i4ep = 1:100
@@ -38,7 +35,6 @@ s = size(files);
 %% for plotting average of simulations
 
 fig_endpointmean = figure(2);
-
 
 % collect data points and add them into a row in a matrix
 

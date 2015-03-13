@@ -66,46 +66,79 @@ for t = dt:dt:tmax
     
     % next, nucleate microtubules
     
-    % re-calculate densities if necessary
-    if needplusendRho 
-        plusendRho = calcplusendRho(MT);
-    end
-    if needmtRho
-        mtRho = calcmtRho(MT,counter);
-    end
-    
-    % loop through the MT array to nucleate MT
+    % loop through the spatial bin to nucleate MT
     if nucleationscenario ~= 0
-        for i = 1:counter       
-            daughter = nucleation_MT2MT(MT(i,:),dt);
-            % keep daughter unless it is [0 0 0]
-            if any(daughter)
-                counter_next = counter_next + 1;
-                MT(counter_next,:) = daughter;
+   
+        % re-calculate densities if necessary
+        if needplusendRho 
+            plusendRho = calcplusendRho(MT);
+        end
+        if needmtRho
+            mtRho = calcmtRho(MT,counter);
+        end
+        
+        % generate new MTs
+        newMTs = [];
+        for j = 1:length(xbin)
+            new = nucleation_spatial(xbin,j,dt);
+            newMTs =[newMTs new];
+        end
+        
+        % add new MTs to system
+        s_newMTs = size(newMTs);
+        if s_newMTs(1) > 1
+            if counter+s_newMTs(1) > Nmax
+                disp('too many MTs nucleated'); stop
+            else
+                % somthing is wrong here?????
+                MT((counter+1):(counter+s_newMTs(1)), :) = newMTs;
+                counter = counter + s_newMTs(1);
             end
         end
-        counter = counter_next;
+        
     end
-  
     
-    % initialize counter_next before next time loop, just in case
-    counter_next = 0;
+%     % loop through the MT array to nucleate MT
+%     if nucleationscenario ~= 0
+%         
+%         % re-calculate densities if necessary
+%         if needplusendRho 
+%             plusendRho = calcplusendRho(MT);
+%         end
+%         if needmtRho
+%             mtRho = calcmtRho(MT,counter);
+%         end
+% 
+%         for i = 1:counter       
+%             daughter = nucleation_MT2MT(MT(i,:),dt);
+%             % keep daughter unless it is [0 0 0]
+%             if any(daughter)
+%                 counter_next = counter_next + 1;
+%                 MT(counter_next,:) = daughter;
+%             end
+%         end
+%         counter = counter_next;
+%     end
     
-    % check if there are too many MTs in the system
-    if counter > Nmax
-       disp('too many MTs');
-       Nmax
-       counter
-       plusends = hist(MT(any(MT,2),3),xbin); plot(xbin, plusends);
-       stop
-    end
+    
+%     % check if there are too many MTs in the system
+%     if counter > Nmax
+%        disp('too many MTs');
+%        Nmax
+%        counter
+%        plusends = hist(MT(any(MT,2),3),xbin); plot(xbin, plusends);
+%        stop
+%     end
     
     % finally, store time and MT state every half minute
     if mod(t,1) < dt
         curr_tp = curr_tp+1;
         time(curr_tp) = t;
         result(:,:,curr_tp) = MT;
-    end 
+    end
+    
+    % initialize counter_next before next time loop, just in case
+    counter_next = 0;
 
 end
 
