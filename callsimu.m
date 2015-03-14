@@ -17,8 +17,8 @@ mtCap      = 50/xbinwidth;
 
 global boundarycondition nucleationscenario depolyreg;
 boundarycondition = 3;
-nucleationscenario = 4;
-depolyreg = 0;
+nucleationscenario = 1;
+depolyreg = 1;
 
 global v_poly v_depoly f_cat f_res;
 v_poly   =  8.8;    v_depoly   = 13.7; 
@@ -28,7 +28,7 @@ dt = 0.04;
 % Ni = 500;
 Ni = 50;
 
-nucrates = (0:0.4:2)';
+nucrates = (2:.3:2.6)';
 % nucrates = (0:1:3)';
 n_rep = 5;
 nucrates = repmat(nucrates,1,n_rep);
