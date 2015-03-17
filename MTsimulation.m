@@ -11,8 +11,8 @@ global xbin tmax Nmax plusendCap mtCap;
 global depolyreg nucleationscenario;
 global plusendRho mtRho;
 
-needplusendRho = (depolyreg==1)|(nucleationscenario==2);
-needmtRho = (depolyreg==2)|(nucleationscenario==4);
+needplusendRho = (depolyreg==1)|((nucleationscenario==1)|(nucleationscenario==2));
+needmtRho = (depolyreg==2)|((nucleationscenario==3)|(nucleationscenario==4));
 
 MT = zeros(Nmax,3);    % array for storing MTs for timepoints
 curr_tp = 1;           % no. of timepoints for data storage
@@ -63,42 +63,9 @@ for t = dt:dt:tmax
     
     % next, nucleate microtubules
     
-    % loop through the spatial bin to nucleate MT
-    if nucleationscenario ~= 0
-   
-        % re-calculate densities if necessary
-        if needplusendRho 
-            plusendRho = calcplusendRho(MT);
-        end
-        if needmtRho
-            mtRho = calcmtRho(MT,counter);
-        end
-        
-        % generate new MTs
-        newMTs = [];
-        for j = 1:length(xbin)
-            new = nucleation_spatial(xbin,j,dt);            
-            newMTs =[newMTs; new];
-        end
-     
-        % add new MTs to system
-        s_newMTs = size(newMTs);
-        nnew = s_newMTs(1);
-        if nnew > 1
-            if counter+nnew > Nmax
-                disp('too many MTs nucleated'); stop
-            else
-                MT((counter+1):(counter+nnew), :) = newMTs;
-                counter = counter + nnew;
-            end
-        end
-        
-    end
-    
-% %     newMTs2 = [];
-%     % loop through the MT array to nucleate MT
+%     % loop through the spatial bin to nucleate MT
 %     if nucleationscenario ~= 0
-%         
+%    
 %         % re-calculate densities if necessary
 %         if needplusendRho 
 %             plusendRho = calcplusendRho(MT);
@@ -106,19 +73,50 @@ for t = dt:dt:tmax
 %         if needmtRho
 %             mtRho = calcmtRho(MT,counter);
 %         end
-% 
-%         for i = 1:counter       
-%             daughter = nucleation_MT2MT(MT(i,:),dt);
-%             % keep daughter unless it is [0 0 0]
-%             if any(daughter)
-%                 counter_next = counter_next + 1;
-%                 MT(counter_next,:) = daughter;
-% %                 newMTs2 =[newMTs2; daughter];
+%         
+%         % generate new MTs
+%         newMTs = [];
+%         for j = 1:length(xbin)
+%             new = nucleation_spatial(xbin,j,dt);            
+%             newMTs =[newMTs; new];
+%         end
+%      
+%         % add new MTs to system
+%         s_newMTs = size(newMTs);
+%         nnew = s_newMTs(1);
+%         if nnew > 1
+%             if counter+nnew > Nmax
+%                 disp('too many MTs nucleated'); stop
+%             else
+%                 MT((counter+1):(counter+nnew), :) = newMTs;
+%                 counter = counter + nnew;
 %             end
 %         end
-%         counter = counter_next;
+%         
 %     end
-%     
+    
+    % loop through the MT array to nucleate MT
+    if nucleationscenario ~= 0
+        
+        % re-calculate densities if necessary
+        if needplusendRho 
+            plusendRho = calcplusendRho(MT);
+        end
+        if needmtRho
+            mtRho = calcmtRho(MT,counter);
+        end
+
+        for i = 1:counter       
+            daughter = nucleation_MT2MT(MT(i,:),dt);
+            % keep daughter unless it is [0 0 0]
+            if any(daughter)
+                counter_next = counter_next + 1;
+                MT(counter_next,:) = daughter;
+            end
+        end
+        counter = counter_next;
+    end
+    
 %     if ~exist('rs')
 %         rs = [];
 %     end
@@ -133,14 +131,14 @@ for t = dt:dt:tmax
 %         std(rs)
 %     end
     
-%     % check if there are too many MTs in the system
-%     if counter > Nmax
-%        disp('too many MTs');
-%        Nmax
-%        counter
-%        plusends = hist(MT(any(MT,2),3),xbin); plot(xbin, plusends);
-%        stop
-%     end
+    % check if there are too many MTs in the system
+    if counter > Nmax
+       disp('too many MTs');
+       Nmax
+       counter
+       plusends = hist(MT(any(MT,2),3),xbin); plot(xbin, plusends);
+       stop
+    end
     
     % finally, store time and MT state every half minute
     if mod(t,1) < dt

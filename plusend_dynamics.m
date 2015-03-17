@@ -42,7 +42,7 @@ elseif MT(1) == 0
             y = hist(MT(3), xbin);              
             index = sum((1:length(xbin)).*y);
             density = plusendRho(index);            % plusendRho dep
-            v_depoly_mod = v_depoly+6*density;     % function arbitrary
+            v_depoly_mod = v_depoly+30*density;     % function arbitrary
             
         elseif depolyreg == 2
 

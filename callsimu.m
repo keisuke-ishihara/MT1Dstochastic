@@ -6,7 +6,7 @@ global xbin xbinwidth tmax Nmax;
 xbinwidth = 4;              % in microns
 xbin = 0:xbinwidth:200;   
 tmax = 20;
-Nmax = 100000;           % max number of MTs to simulate
+Nmax = 50000;           % max number of MTs to simulate
 % Nmax = 10000;           % max number of MTs to simulate
 
 global plusendCap mtCap;
@@ -18,7 +18,7 @@ mtCap      = 50/xbinwidth;
 global boundarycondition nucleationscenario depolyreg;
 boundarycondition = 3;
 nucleationscenario = 1;
-depolyreg = 1;
+depolyreg = 0;
 
 global v_poly v_depoly f_cat f_res;
 v_poly   =  8.8;    v_depoly   = 13.7; 
@@ -26,11 +26,11 @@ f_cat = 0.05*60;    f_res = 0.006*60;
 
 dt = 0.04;
 % Ni = 500;
-Ni = 50;
+Ni = 1000;
 
-nucrates = (2:.3:2.6)';
-% nucrates = (0:1:3)';
-n_rep = 5;
+nucrates = (0:1:3)';
+% nucrates = [0];
+n_rep = 3;
 nucrates = repmat(nucrates,1,n_rep);
 
 tic

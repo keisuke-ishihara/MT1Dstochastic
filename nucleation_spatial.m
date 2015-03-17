@@ -15,18 +15,18 @@ global plusendCap mtCap xbinwidth;
 % lambda: the rate of nucleation in a given position
 
 if nucleationscenario == 1
-    lambda = nucrate*plusendCap*plusendRho(j);
+    lambda = nucrate*plusendCap*xbinwidth*plusendRho(j);
 elseif nucleationscenario == 2
     lambda = nucrate*plusendCap*xbinwidth*plusendRho(j)*max(1-plusendRho(j), 0);
 elseif nucleationscenario == 3
-    lambda = nucrate*mtCap*mtRho(j);
+    lambda = nucrate*mtCap*xbinwidth*mtRho(j);
 elseif nucleationscenario == 4
     lambda = nucrate*mtCap*xbinwidth*mtRho(j)*max(1-mtRho(j), 0);
 end
 
 halfw = 0.5*xbinwidth;
-L_bin = max(xbin(j)-halfw, min(xbin));   % left boundary of bin
-R_bin = min(xbin(j)+halfw, max(xbin));   % right boundary of bin
+L_bin = max(xbin(j)-halfw, xbin(1));   % left boundary of bin
+R_bin = min(xbin(j)+halfw, xbin(end));   % right boundary of bin
 
 n = poissrnd(lambda*time);  % determine how many MTs nucleated in this bin
 

@@ -2,7 +2,7 @@ function [ daughter_MT ] = nucleation_MT2MT(parent_MT, time)
 %NUCLEATION_MT2MT Summary of this function goes here
 %   Detailed explanation goes here
 
-global xbin;
+global xbin xbinwidth;
 global nucleationscenario nucrate;
 global plusendRho mtRho;
 
@@ -18,13 +18,13 @@ end
 % scenario = 4;   MT polymer with saturation to local mtRho
 % 
 % assumption: time step is small enough, only one nucleation per parent MT
-%
+%?
 
 daughter_MT = [0 0 0];
 
 if nucleationscenario == 1
     
-    if exprnd(1/nucrate) < time
+    if exprnd(1/nucrate/xbinwidth) < time
         daughter_MT = [1 parent_MT(3) parent_MT(3)];
     end
     
@@ -34,7 +34,7 @@ elseif nucleationscenario == 2
     index = hist(parent_MT(3), xbin).*(1:length(xbin));
     index(index(:)==0) = [];
     cof = min(plusendRho(index),0.9999999);
-    if exprnd(1/nucrate/(1-cof)) < time
+    if exprnd(1/nucrate/xbinwidth/(1-cof)) < time
         daughter_MT = [1 parent_MT(3) parent_MT(3)];
     end
 
@@ -42,7 +42,7 @@ elseif nucleationscenario == 3
     
     L = MT(3)-MT(2);    % length of parent MT
     
-    if exprnd(1/nucrate/L) < time
+    if exprnd(1/nucrate/xbinwidth/L) < time
         pos = unifrnd(parent_MT(2), parent_MT(3));
         daughter_MT = [1 pos pos];
     end
