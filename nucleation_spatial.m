@@ -26,13 +26,13 @@ if nucscenario == 1
     lambdas = nucrate*plusendNumber;
 elseif nucscenario == 2
     u = plusendNumber/plusendCap;
-    u(u>=1) = 1;
+    u(u>1) = 1;
     lambdas = nucrate*plusendNumber.*(1-u);
 elseif nucscenario == 3
     lambdas = nucrate*mtNumber;
 elseif nucscenario == 4
     u = mtNumber/mtCap;
-    u(u>=1) = 1;
+    u(u>1) = 1;
     lambdas = nucrate*mtNumber.*(1-u);
 else
     disp('error nucleation'); stop
@@ -40,9 +40,9 @@ end
 
 % loop through spatial bin
 newMTs = [];
+halfw = 0.5*(midpts(2)-midpts(1));
 for j = 1:length(midpts)
 
-    halfw = 0.5*(midpts(2)-midpts(1));
     L_bin = midpts(j)-halfw;   % left boundary of bin
     R_bin = midpts(j)+halfw;   % right boundary of bin
 

@@ -2,12 +2,12 @@ clear all; close all;
 
 savepath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/';
 
-global xbin xbinwidth tmax Nmax midpts;
+global xbin tmax Nmax midpts;
 xbinwidth = 4;              % in microns
 xbin = 0:xbinwidth:200;  
 midpts = (xbin(1:end-1)+xbin(2:end))/2;
 tmax = 20;
-Nmax = 1000;           % max number of MTs to simulate
+Nmax = 50000;           % max number of MTs to simulate
 % Nmax = 10000;           % max number of MTs to simulate
 
 global plusendCap mtCap;
@@ -15,25 +15,24 @@ global plusendCap mtCap;
 % the numerator defines the number of MTs in the simulation
 % plusendCap = 50/xbinwidth;
 % mtCap      = 50/xbinwidth;
-plusendCap = 20;
-mtCap      = 20; 
+plusendCap = 10;
+mtCap      = 10; 
 
 global boundarycondition nucscenario depolyreg;
 boundarycondition = 3;
-nucscenario = 0;
-depolyreg = 0;
+nucscenario = 1;
+depolyreg = 2;
 
 global v_poly v_depoly f_cat f_res;
 v_poly   =  8.8;    v_depoly   = 13.7; 
 f_cat = 0.05*60;    f_res = 0.006*60;
 
 dt = 0.04;
-% Ni = 500;
-Ni = Nmax;
+Ni = 50;
+% Ni = Nmax;
 
-% nucrates = (0:1:2)';
-nucrates = [0];
-n_rep = 1;
+nucrates = (0:0.8:2.4)';
+n_rep = 5;
 nucrates = repmat(nucrates,1,n_rep);
 
 tic
@@ -51,7 +50,6 @@ for i = 1:length(nucrates(:))
     
 end
 
-
 stop;
 
 J = (v_poly*f_res - v_depoly*f_cat)/(f_cat+f_res);
@@ -68,9 +66,10 @@ lengths = MT(:,3) - MT(:,2); % include length zero
 h1 = figure(1);
 set(0,'DefaultAxesFontSize', 16)
 set(0, 'DefaultFigurePosition', [10 10 350 250]);
-hist(lengths)
+figure; hist(lengths)
 
-pd = fitdist(lengths,'Exponential');
+mean(lengths)
+pd = fitdist(lengths,'Exponential')
 confidence = paramci(pd);
 meanofd = pd.mu;
 

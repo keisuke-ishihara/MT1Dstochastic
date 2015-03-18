@@ -10,16 +10,15 @@ function [time, result] = MTsimulation(Ni,dt)
 global xbin midpts tmax Nmax;
 global depolyreg nucscenario;
 global plusendCap mtCap;
-global needplusendNumber needmtNumber;
+global plusendNumber mtNumber needplusendNumber needmtNumber;
 
 needplusendNumber = (depolyreg==1)|((nucscenario==1)|(nucscenario==2));
 needmtNumber      = (depolyreg==2)|((nucscenario==3)|(nucscenario==4));
 
 MT      = zeros(Nmax,3);    % array for storing MTs for timepoints
-MT_next = zeros(Nmax,3);    % array for storing MTs for timepoints
+% MT_next = zeros(Nmax,3);    % array for storing MTs for timepoints
 
 curr_tp = 1;           % no. of timepoints for data storage
-
 
 %% Step 1: initialization of MT array
 
@@ -45,7 +44,6 @@ for t = dt:dt:tmax
         mtNumber = calcmtNumber(MT, counter, midpts);
     end
     
-    
     % apply plus end dynamics to individual MTs
     for i = 1:counter        
  
@@ -54,11 +52,12 @@ for t = dt:dt:tmax
         % keep 'updated' unless it is shrinking length zero
         if ~((updated(1)==0)&&(updated(2)==updated(3)))
             counter_next = counter_next + 1;
-            MT_next(counter_next,:) = updated;
+%             MT_next(counter_next,:) = updated;
+            MT(counter_next,:) = updated;
         end       
         
     end
-    MT = [MT_next(1:counter_next,:); zeros(Nmax-counter_next,3)];
+%     MT = [MT_next(1:counter_next,:); zeros(Nmax-counter_next,3)];
     counter = counter_next;
     counter_next = 0;    
     
@@ -75,14 +74,12 @@ for t = dt:dt:tmax
             if counter+nnew > Nmax
                 disp('too many MTs nucleated'); stop
             else
-                MT_next((counter+1):(counter+nnew), :) = newMTs;
+                MT((counter+1):(counter+nnew), :) = newMTs;
                 counter = counter + nnew;
                 counter_next = 0;
             end
-            MT = MT_next;
         end
-    end
-    
+    end    
    
 %   finally, store time and MT state every half minute
     if mod(t,1) < dt

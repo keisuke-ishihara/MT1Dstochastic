@@ -9,8 +9,11 @@ function [ MT_new ] = plusend_dynamics(MT, time)
 % boundarycondition = 2, disappear
 % boundarycondition = 3, disappear unless minus end is at origin, then rescue
 
-global boundarycondition depolyreg plusendRho mtRho xbin;
+global boundarycondition depolyreg;
 global v_poly v_depoly f_cat f_res;
+global plusendCap mtCap;
+global plusendNumber mtNumber midpts;
+
 
 if (MT(1)==0)&&(MT(2)==MT(3))
     disp('input is shrinking MT with length zero'); stop
@@ -24,6 +27,7 @@ end
 if MT(1) == 1
 
     if MT(3)==MT(2)
+        % exception for zero-length growing MTs
         t_poly = time;
         MT_new = [1 MT(2) MT(3)+v_poly*time]; 
     else   
@@ -42,22 +46,23 @@ elseif MT(1) == 0
     if t_depoly > time
         
         % regulation of depolymerization
-        if depolyreg == 1
+        if depolyreg == 0
+            v_depoly_mod = v_depoly;
             
-%             y = hist(MT(3), xbin);              
-%             index = sum((1:length(xbin)).*y);
-%             density = plusendRho(index);            % plusendRho dep
-%             v_depoly_mod = v_depoly+30*density;     % function arbitrary
+        elseif depolyreg == 1
+            y = hist(MT(3), midpts);              
+            index = sum((1:length(midpts)).*y);
+            density = plusendNumber(index)/plusendCap;
+            v_depoly_mod = v_depoly+50*density;     % function arbitrary
             
         elseif depolyreg == 2
-
-%             y = hist(MT(3), xbin);              
-%             index = sum((1:length(xbin)).*y);
-%             density = mtRho(index);                 % mtRho dep
-%             v_depoly_mod = v_depoly+10*density;     % function arbitrary
+            y = hist(MT(3), midpts);              
+            index = sum((1:length(midpts)).*y);
+            density = mtNumber(index)/mtCap;                 
+            v_depoly_mod = v_depoly+50*density;     % function arbitrary
             
         else
-            v_depoly_mod = v_depoly;
+            disp('undefined depolyreg'); stop
         end
         
         if MT(3)-MT(2)-v_depoly_mod*time < 0
