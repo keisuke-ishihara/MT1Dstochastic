@@ -15,13 +15,13 @@ global plusendCap mtCap;
 % the numerator defines the number of MTs in the simulation
 % plusendCap = 50/xbinwidth;
 % mtCap      = 50/xbinwidth;
-plusendCap = 10;
-mtCap      = 10; 
+plusendCap = 50;
+mtCap      = 50; 
 
 global boundarycondition nucscenario depolyreg;
 boundarycondition = 3;
-nucscenario = 1;
-depolyreg = 2;
+nucscenario = 4;
+depolyreg = 0;
 
 global v_poly v_depoly f_cat f_res;
 v_poly   =  8.8;    v_depoly   = 13.7; 
@@ -31,7 +31,7 @@ dt = 0.04;
 Ni = 50;
 % Ni = Nmax;
 
-nucrates = (0:0.8:2.4)';
+nucrates = (0:1.8:3.6)';
 n_rep = 5;
 nucrates = repmat(nucrates,1,n_rep);
 
@@ -50,13 +50,12 @@ for i = 1:length(nucrates(:))
     
 end
 
-stop;
-
 J = (v_poly*f_res - v_depoly*f_cat)/(f_cat+f_res);
 D = v_poly*v_depoly/(f_cat+f_res);
 tau =4*D/J^2;
 L = D/abs(J);
 
+stop;
 
 %% plot length distribution
 
