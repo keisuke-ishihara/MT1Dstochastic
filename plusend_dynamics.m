@@ -1,8 +1,8 @@
 function [ MT_new ] = plusend_dynamics(MT, time)
 % Plus-end dynamics for both growing and shrinking MTs as inputs.
 % 
-% depolyreg = 1; plusendRho dependent regulation
-% depolyreg = 2; mtRho dependent regulation
+% depolyreg = 1; plusend dependent regulation
+% depolyreg = 2; mt dependent regulation
 %
 % What happens when plus end reach minus end?
 % boundarycondition = 1, instant rescue
@@ -22,15 +22,20 @@ end
 
 % for growing plus-end
 if MT(1) == 1
-    t_poly = exprnd(1/f_cat);
 
-    if t_poly > time
+    if MT(3)==MT(2)
+        t_poly = time;
         MT_new = [1 MT(2) MT(3)+v_poly*time]; 
-    else
-        MT_new = [0 MT(2) MT(3)];   % switch to shrinking
+    else   
+        t_poly = exprnd(1/f_cat);
+        if t_poly > time
+            MT_new = [1 MT(2) MT(3)+v_poly*time]; 
+        else
+            MT_new = [0 MT(2) MT(3)];   % switch to shrinking
+        end
     end
-    
-    % for shrinking plus-end
+       
+% for shrinking plus-end
 elseif MT(1) == 0     
     t_depoly = exprnd(1/f_res);
         
@@ -39,17 +44,17 @@ elseif MT(1) == 0
         % regulation of depolymerization
         if depolyreg == 1
             
-            y = hist(MT(3), xbin);              
-            index = sum((1:length(xbin)).*y);
-            density = plusendRho(index);            % plusendRho dep
-            v_depoly_mod = v_depoly+30*density;     % function arbitrary
+%             y = hist(MT(3), xbin);              
+%             index = sum((1:length(xbin)).*y);
+%             density = plusendRho(index);            % plusendRho dep
+%             v_depoly_mod = v_depoly+30*density;     % function arbitrary
             
         elseif depolyreg == 2
 
-            y = hist(MT(3), xbin);              
-            index = sum((1:length(xbin)).*y);
-            density = mtRho(index);                 % mtRho dep
-            v_depoly_mod = v_depoly+10*density;     % function arbitrary
+%             y = hist(MT(3), xbin);              
+%             index = sum((1:length(xbin)).*y);
+%             density = mtRho(index);                 % mtRho dep
+%             v_depoly_mod = v_depoly+10*density;     % function arbitrary
             
         else
             v_depoly_mod = v_depoly;

@@ -3,7 +3,7 @@ function [ daughter_MT ] = nucleation_MT2MT(parent_MT, time)
 %   Detailed explanation goes here
 
 global xbin xbinwidth;
-global nucleationscenario nucrate;
+global nucscenario nucrate;
 global plusendRho mtRho;
 
 if (parent_MT(1)==0)&&(parent_MT(2)==parent_MT(3))
@@ -22,13 +22,13 @@ end
 
 daughter_MT = [0 0 0];
 
-if nucleationscenario == 1
+if nucscenario == 1
     
     if exprnd(1/nucrate/xbinwidth) < time
         daughter_MT = [1 parent_MT(3) parent_MT(3)];
     end
     
-elseif nucleationscenario == 2
+elseif nucscenario == 2
     
     % parent_MT plusend position defines local
     index = hist(parent_MT(3), xbin).*(1:length(xbin));
@@ -38,7 +38,7 @@ elseif nucleationscenario == 2
         daughter_MT = [1 parent_MT(3) parent_MT(3)];
     end
 
-elseif nucleationscenario == 3
+elseif nucscenario == 3
     
     L = MT(3)-MT(2);    % length of parent MT
     
@@ -47,7 +47,7 @@ elseif nucleationscenario == 3
         daughter_MT = [1 pos pos];
     end
     
-% elseif nucleationscenario == 4
+% elseif nucscenario == 4
 %     
 %     % this needs work here!! not trivial
 %     index = hist(parent_MT(3), xbin).*(1:length(xbin));

@@ -1,13 +1,11 @@
-function [ out ] = calcmtRho(MT, counter)
+function [ mtNo ] = calcmtNumber(MT, counter, xbin)
 %CALCMTRHO 
 % 
-% calculate MT density (no. of MT) normalized by mtCap
+% calculate no. of MT in system
 % postion is centered around value of elements in xbin
 % 
 
-    global xbin mtCap;
-
-    mtRho = zeros(1, length(xbin));
+    mtNo = zeros(1, length(xbin));
     for i = 1:counter
         minusendbin = hist(MT(i,2), xbin).*(1:length(xbin));
         plusendbin  = hist(MT(i,3), xbin).*(1:length(xbin));  
@@ -17,11 +15,9 @@ function [ out ] = calcmtRho(MT, counter)
            % assumption: MT shorter than bin size does not contribute
            add = zeros(1, length(xbin));
            add(minusendbin:plusendbin) = 1;
-           mtRho = mtRho + add;
+           mtNo = mtNo + add;
         end            
     end
-
-    out = mtRho/mtCap;
 
 end
 

@@ -1,4 +1,4 @@
-function [ newMTs ] = nucleation_spatial( xbin, j, time )
+function [ newMTs ] = nucleation_spatial(MT, counter, midpts, time)
 %NUCLEATION_SPATIAL 
 % consider different scenarios for MT-stimulated MT nucleation
 % 
@@ -8,33 +8,51 @@ function [ newMTs ] = nucleation_spatial( xbin, j, time )
 % scenario = 4;   MT polymer with saturation to local mtRho
 % 
 
-global nucleationscenario nucrate;
-global plusendRho mtRho;
-global plusendCap mtCap xbinwidth;
+global nucscenario nucrate;
+global needplusendNumber needmtNumber;
+global plusendCap mtCap;
+
+% calculate numbers as necessary
+if needplusendNumber 
+    plusendNumber = calcplusendNumber(MT, counter, midpts);
+end
+if needmtNumber
+    mtNumber = calcmtNumber(MT, counter, midpts);
+end
 
 % lambda: the rate of nucleation in a given position
 
-if nucleationscenario == 1
-    lambda = nucrate*plusendCap*xbinwidth*plusendRho(j);
-elseif nucleationscenario == 2
-    lambda = nucrate*plusendCap*xbinwidth*plusendRho(j)*max(1-plusendRho(j), 0);
-elseif nucleationscenario == 3
-    lambda = nucrate*mtCap*xbinwidth*mtRho(j);
-elseif nucleationscenario == 4
-    lambda = nucrate*mtCap*xbinwidth*mtRho(j)*max(1-mtRho(j), 0);
+if nucscenario == 1
+    lambdas = nucrate*plusendNumber;
+elseif nucscenario == 2
+    u = plusendNumber/plusendCap;
+    u(u>=1) = 1;
+    lambdas = nucrate*plusendNumber.*(1-u);
+elseif nucscenario == 3
+    lambdas = nucrate*mtNumber;
+elseif nucscenario == 4
+    u = mtNumber/mtCap;
+    u(u>=1) = 1;
+    lambdas = nucrate*mtNumber.*(1-u);
+else
+    disp('error nucleation'); stop
 end
 
-halfw = 0.5*xbinwidth;
-L_bin = max(xbin(j)-halfw, xbin(1));   % left boundary of bin
-R_bin = min(xbin(j)+halfw, xbin(end));   % right boundary of bin
-
-n = poissrnd(lambda*time);  % determine how many MTs nucleated in this bin
-
+% loop through spatial bin
 newMTs = [];
-if n > 1
-    pos = unifrnd(L_bin, R_bin,n,1);
-    newMTs = [ones(n,1), pos, pos];         % new length zero MTs
-end
+for j = 1:length(midpts)
 
+    halfw = 0.5*(midpts(2)-midpts(1));
+    L_bin = midpts(j)-halfw;   % left boundary of bin
+    R_bin = midpts(j)+halfw;   % right boundary of bin
+
+    n = poissrnd(lambdas(j)*time);  % determine how many MTs nucleated in this bin
+
+    if n > 1
+        pos = unifrnd(L_bin, R_bin,n,1);
+        new = [ones(n,1), pos, pos];         % new length zero MTs
+        newMTs = [newMTs; new];
+    end
+    
 end
 
