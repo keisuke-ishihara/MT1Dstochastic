@@ -20,7 +20,7 @@ mtCap      = 50;
 
 global boundarycondition nucscenario depolyreg;
 boundarycondition = 3;
-nucscenario = 4;
+nucscenario = 0;
 depolyreg = 0;
 
 global v_poly v_depoly f_cat f_res;
@@ -32,7 +32,8 @@ Ni = 50;
 % Ni = Nmax;
 
 nucrates = (0:1.8:3.6)';
-n_rep = 5;
+% nucrates = [0];
+n_rep = 3;
 nucrates = repmat(nucrates,1,n_rep);
 
 tic

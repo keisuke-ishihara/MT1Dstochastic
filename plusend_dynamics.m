@@ -29,13 +29,13 @@ if MT(1) == 1
     if MT(3)==MT(2)
         % exception for zero-length growing MTs
         t_poly = time;
-        MT_new = [1 MT(2) MT(3)+v_poly*time]; 
+        MT_new = [1 MT(2) MT(3)+v_poly*time MT(4)+time]; 
     else   
         t_poly = exprnd(1/f_cat);
         if t_poly > time
-            MT_new = [1 MT(2) MT(3)+v_poly*time]; 
+            MT_new = [1 MT(2) MT(3)+v_poly*time MT(4)+time]; 
         else
-            MT_new = [0 MT(2) MT(3)];   % switch to shrinking
+            MT_new = [0 MT(2) MT(3) MT(4)+time];   % switch to shrinking
         end
     end
        
@@ -67,23 +67,23 @@ elseif MT(1) == 0
         
         if MT(3)-MT(2)-v_depoly_mod*time < 0
             if boundarycondition == 1
-                MT_new = [1 MT(2) MT(2)];
+                MT_new = [1 MT(2) MT(2) 0];
             elseif boundarycondition == 2
-                MT_new = [0 0 0];
+                MT_new = [0 0 0 0];
             elseif boundarycondition == 3
                 if MT(2) == 0
-                    MT_new = [1 MT(2) MT(2)];
+                    MT_new = [1 MT(2) MT(2) 0];
                 else
-                    MT_new = [0 0 0];
+                    MT_new = [0 0 0 0];
                 end
             else
                 disp('minus end scenario unspecified'); stop
             end
         else
-            MT_new = [0 MT(2) MT(3)-v_depoly_mod*time];
+            MT_new = [0 MT(2) MT(3)-v_depoly_mod*time MT(4)+time];
         end
     else
-        MT_new = [1 MT(2) MT(3)];   % switch to growing
+        MT_new = [1 MT(2) MT(3) MT(4)+time];   % switch to growing
     end
     
     

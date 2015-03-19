@@ -50,7 +50,7 @@ for j = 1:length(midpts)
 
     if n > 1
         pos = unifrnd(L_bin, R_bin,n,1);
-        new = [ones(n,1), pos, pos];         % new length zero MTs
+        new = [ones(n,1), pos, pos, zeros(n,1)];         % new length zero MTs
         newMTs = [newMTs; new];
     end
     

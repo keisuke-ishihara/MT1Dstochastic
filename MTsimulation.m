@@ -2,7 +2,7 @@ function [time, result] = MTsimulation(Ni,dt)
 
 % this code simulates individual MTs using growing and shrinking functions
 % 
-%       MT(i,:) = [is(growing) pos_minusend pos_plusend]
+%       MT(i,:) = [is(growing) pos_minusend pos_plusend age]
 %
 
 %% Step 0: specify simulation conditions
@@ -15,14 +15,15 @@ global plusendNumber mtNumber needplusendNumber needmtNumber;
 needplusendNumber = (depolyreg==1)|((nucscenario==1)|(nucscenario==2));
 needmtNumber      = (depolyreg==2)|((nucscenario==3)|(nucscenario==4));
 
-MT      = zeros(Nmax,3);    % array for storing MTs for timepoints
+MT      = zeros(Nmax,4);    % array for storing MTs for timepoints
 % MT_next = zeros(Nmax,3);    % array for storing MTs for timepoints
 
 curr_tp = 1;           % no. of timepoints for data storage
 
 %% Step 1: initialization of MT array
 
-MT(1:Ni,:) = [1*ones(Ni,1) 0*ones(Ni,1) 5*ones(Ni,1)];
+% MT(1:Ni,:) = [1*ones(Ni,1) 0*ones(Ni,1) 5*ones(Ni,1)];
+MT(1:Ni,:) = [1*ones(Ni,1) zeros(Ni,1) 5*ones(Ni,1) zeros(Ni,1)];
 
 counter = Ni;             % keeps track no. of MTs to loop, initialize with Ni
 counter_next = 0;
@@ -85,7 +86,8 @@ for t = dt:dt:tmax
     if mod(t,1) < dt
         curr_tp = curr_tp+1;
         time(curr_tp) = t;
-        result(:,:,curr_tp) = MT;
+%         result(:,:,curr_tp) = MT;
+        result(:,:,curr_tp) = [MT(1:counter,:); zeros(Nmax-counter,4)];
     end
     
 end

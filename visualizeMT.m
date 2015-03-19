@@ -1,3 +1,5 @@
+close all;
+
 % clear all; clc; close all;
 % 
 % xbin = 0:4:200;
@@ -10,18 +12,17 @@
 % MT = MT1;
 
 ind = any(MT');
-
 curr = MT(ind',:);
-
 lengths = curr(:,3) - curr(:,2);
-figure; hist(lengths)
-mean(lengths)
+
+ages    = curr(:,4); length(ages)
+pd = fitdist(ages,'Exponential')
+ages(ages==0) = []; length(ages)
+pd = fitdist(ages,'Exponential')
 
 n = length(curr);
-% calcplusendNumber(curr, n, midpts);
 
-mean(lengths)
-pd = fitdist(lengths,'Exponential')
+pd = fitdist(lengths,'Exponential');
 confidence = paramci(pd);
 meanofd = pd.mu;
 
@@ -31,19 +32,22 @@ meanofd = pd.mu;
 
 cmap_grow   = [1 1 1; 0 0.5 1];
 cmap_shrink = [1 1 1; 1 0.2 0.1];
+cmap_age    = [0.1 0.8 0.4];
 
-% subplot(2,1,1)
 figure;
 barh([curr(:,2) curr(:,3)-curr(:,2)],'stacked')
 colormap(cmap_grow);
 axis([0 max(midpts) 0 length(curr)])
 
+figure;
+barh(curr(:,4));
+colormap(cmap_age);
 
-stop
+% hist(ages)
+% mean(ages)
 
-subplot(2,1,2)
-barh([curr(:,2) curr(:,3)],'stacked')
-
-
-
+J = (v_poly*f_res - v_depoly*f_cat)/(f_cat+f_res);
+D = v_poly*v_depoly/(f_cat+f_res);
+tau =4*D/J^2;
+L = D/abs(J);
 
