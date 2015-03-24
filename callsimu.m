@@ -20,7 +20,7 @@ mtCap      = 50;
 
 global boundarycondition nucscenario depolyreg;
 boundarycondition = 3;
-nucscenario = 0;
+nucscenario = 4;
 depolyreg = 0;
 
 global v_poly v_depoly f_cat f_res;
@@ -28,12 +28,12 @@ v_poly   =  8.8;    v_depoly   = 13.7;
 f_cat = 0.05*60;    f_res = 0.006*60;
 
 dt = 0.04;
-Ni = 50;
+Ni = 100;
 % Ni = Nmax;
 
-nucrates = (0:1.8:3.6)';
-% nucrates = [0];
-n_rep = 3;
+nucrates = (0:1.2:3.6)';
+% nucrates = [0]';
+n_rep = 5;
 nucrates = repmat(nucrates,1,n_rep);
 
 tic
@@ -73,7 +73,10 @@ pd = fitdist(lengths,'Exponential')
 confidence = paramci(pd);
 meanofd = pd.mu;
 
+
+
 stop
+
 
 %% plot plus and minus ends
 
