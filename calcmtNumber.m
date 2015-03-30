@@ -1,5 +1,5 @@
 function [ mtNo ] = calcmtNumber(MT, counter, xbin)
-%CALCMTRHO 
+%CALMTNUMBER
 % 
 % calculate no. of MT in system
 % postion is centered around value of elements in xbin

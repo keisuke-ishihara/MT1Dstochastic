@@ -4,9 +4,6 @@ clear all; close all;
 
 datapath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/';
 
-% datapath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/20141111_vregoff_alpha0to1.9/';
-% datapath = '/Users/Keisuke/Dropbox/KorolevGroup/simudata/20141111_vregon_alpha0to2.6/';
-
 % load list of simulation results
 old = cd(datapath);
 files = dir('*.mat');

@@ -86,7 +86,6 @@ elseif MT(1) == 0
         MT_new = [1 MT(2) MT(3) MT(4)+time];   % switch to growing
     end
     
-    
 else
     disp('error: MT is neither growing or shrinking'); stop
 end

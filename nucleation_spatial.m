@@ -3,9 +3,9 @@ function [ newMTs ] = nucleation_spatial(MT, counter, midpts, time)
 % consider different scenarios for MT-stimulated MT nucleation
 % 
 % scenario = 1;   plus-end bifurcation
-% scenario = 2;   plus-end bifurcation with saturation to local plusendRho
+% scenario = 2;   plus-end bifurcation with sat to local plusend density
 % scenario = 3;   MT polymer stimulated nucleation
-% scenario = 4;   MT polymer with saturation to local mtRho
+% scenario = 4;   MT polymer with saturation to local mt density
 % 
 
 global nucscenario nucrate;

@@ -1,4 +1,4 @@
-function [time, result] = MTsimulation(Ni,dt)
+function [time, result] = MTsimulation()
 
 % this code simulates individual MTs using growing and shrinking functions
 % 
@@ -7,7 +7,7 @@ function [time, result] = MTsimulation(Ni,dt)
 
 %% Step 0: specify simulation conditions
 
-global xbin midpts tmax Nmax;
+global xbin midpts tmax Nmax Ni dt;
 global depolyreg nucscenario;
 global plusendCap mtCap;
 global plusendNumber mtNumber needplusendNumber needmtNumber;
@@ -16,13 +16,11 @@ needplusendNumber = (depolyreg==1)|((nucscenario==1)|(nucscenario==2));
 needmtNumber      = (depolyreg==2)|((nucscenario==3)|(nucscenario==4));
 
 MT      = zeros(Nmax,4);    % array for storing MTs for timepoints
-% MT_next = zeros(Nmax,3);    % array for storing MTs for timepoints
 
 curr_tp = 1;           % no. of timepoints for data storage
 
 %% Step 1: initialization of MT array
 
-% MT(1:Ni,:) = [1*ones(Ni,1) 0*ones(Ni,1) 5*ones(Ni,1)];
 MT(1:Ni,:) = [1*ones(Ni,1) zeros(Ni,1) 5*ones(Ni,1) zeros(Ni,1)];
 
 counter = Ni;             % keeps track no. of MTs to loop, initialize with Ni
@@ -53,12 +51,10 @@ for t = dt:dt:tmax
         % keep 'updated' unless it is shrinking length zero
         if ~((updated(1)==0)&&(updated(2)==updated(3)))
             counter_next = counter_next + 1;
-%             MT_next(counter_next,:) = updated;
             MT(counter_next,:) = updated;
         end       
         
     end
-%     MT = [MT_next(1:counter_next,:); zeros(Nmax-counter_next,3)];
     counter = counter_next;
     counter_next = 0;    
     
@@ -86,7 +82,6 @@ for t = dt:dt:tmax
     if mod(t,1) < dt
         curr_tp = curr_tp+1;
         time(curr_tp) = t;
-%         result(:,:,curr_tp) = MT;
         result(:,:,curr_tp) = [MT(1:counter,:); zeros(Nmax-counter,4)];
     end
     

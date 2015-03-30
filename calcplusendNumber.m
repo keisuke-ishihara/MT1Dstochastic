@@ -1,5 +1,5 @@
 function [ plusendNo ] = calcplusendNumber(MT, counter, midpts)
-%CALCPLUSENDRHO
+%CALCPLUSENDNUMBER
 % 
 % calculate plus-end numbers in system
 % postion is centered around value of elements in xbin
