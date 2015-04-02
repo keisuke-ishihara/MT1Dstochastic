@@ -12,9 +12,14 @@
 # sbatch --array=1-30 simu_arrays.sbatch
 
 mkdir param${SLURM_ARRAY_TASK_ID}_out
-cp param${SLURM_ARRAY_TASK_ID}.mat ./param${SLURM_ARRAY_TASK_ID}_out/param.mat
-cd param${SLURM_ARRAY_TASK_ID}_out
+#cp param${SLURM_ARRAY_TASK_ID}.mat ./param${SLURM_ARRAY_TASK_ID}_out/param.mat
+#cd param${SLURM_ARRAY_TASK_ID}_out
+cp param${SLURM_ARRAY_TASK_ID}.mat ./param.mat
 
-matlab -nojvm -nosplash -nodesktop < ~/MT1Dstochastic/callsimu.m
+scriptdir=`pwd |sed 's#/[^/]*/[^/]*$##'`  
+echo $scriptdir
 
+matlab -nojvm -nosplash -nodesktop < $scriptdir/callsimu.m
+
+cd..
 rm param.mat
