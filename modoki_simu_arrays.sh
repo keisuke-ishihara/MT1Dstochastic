@@ -5,20 +5,25 @@
 # as a shell script with loops
 
 for FILENAME in *.mat; do
-    INPUT=someletters_12345_moreleters.ext
+
     SUBSTRING=`echo $FILENAME| cut -d'.' -f 1`
     
     mkdir ${SUBSTRING}_out
-    cp ${FILENAME} ./${SUBSTRING}_out/param.mat
+    cp ${FILENAME} ./param.mat
+#    cp ${FILENAME} ./${SUBSTRING}_out/param.mat
+#    cd ${SUBSTRING}_out
+
+    scriptdir=`pwd |sed 's#/[^/]*/[^/]*$##'`  
+#    scriptdir=`pwd |sed 's#/[^/]*/[^/]*/[^/]*$##'`  
+    echo $scriptdir
+
     cd ${SUBSTRING}_out
-
-    targetdir=`pwd |sed 's#/[^/]*/[^/]*/[^/]*$##'`  
-    echo $targetdir
     
-    matlab -nojvm -nosplash -nodesktop < ${targetdir}/callsimu.m
-
-    rm param.mat
+    matlab -nojvm -nosplash -nodesktop < ${scriptdir}/callsimu.m
+    
+#    rm param.mat
     cd ..
+    rm param.mat
 
 done;
 

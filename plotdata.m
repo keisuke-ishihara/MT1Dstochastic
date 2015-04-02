@@ -14,7 +14,6 @@ matfiles = dir('*.mat');
 set(0,'DefaultAxesFontSize', 16)
 set(0, 'DefaultFigurePosition', [10 10 600 450]);
 
-
 %% for each param.mat file, plot individual simulations and finally the average
 
 figure(1); hold on
@@ -22,7 +21,7 @@ for i = 1:length(matfiles)
     
     load(matfiles(i).name);
     currmat = matfiles(i).name;
-    cd([currmat(1:end-4), '_out']); 
+    cd([currmat(1:end-4), '_out']);
     resultmats = dir('result*.mat');
     accum = zeros(length(resultmats),length(midpts));
     

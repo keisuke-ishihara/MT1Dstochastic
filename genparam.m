@@ -23,8 +23,8 @@ for i = 1:length(variation)
 
     global plusendCap mtCap;
     % define carrying capacities so density is robust to xbinwidth
-    plusendCap = 2.5*xbinwidth;
-    mtCap      = 2.5*xbinwidth;
+    plusendCap = 10*xbinwidth;
+    mtCap      = 10*xbinwidth;
 
     global boundarycondition nucscenario depolyreg;
     boundarycondition = 3;
