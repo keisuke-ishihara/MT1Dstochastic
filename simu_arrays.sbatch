@@ -11,7 +11,7 @@
 # this script is called as
 # sbatch --array=1-30 simu_arrays.sbatch
 
-#mkdir param${SLURM_ARRAY_TASK_ID}_out
+mkdir param${SLURM_ARRAY_TASK_ID}_out
 cp param${SLURM_ARRAY_TASK_ID}.mat ./param${SLURM_ARRAY_TASK_ID}_out/param.mat
 cd param${SLURM_ARRAY_TASK_ID}_out
 #cp param${SLURM_ARRAY_TASK_ID}.mat ./param.mat
