@@ -22,4 +22,4 @@ scriptdir=`pwd |sed 's#/[^/]*/[^/]*/[^/]*$##'`
 matlab -nojvm -nosplash -nodesktop < $scriptdir/callsimu.m
 
 rm param.mat
-cd..
+cd ..
