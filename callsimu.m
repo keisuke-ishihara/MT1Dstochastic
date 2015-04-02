@@ -1,5 +1,6 @@
 clear all;
 load('param.mat');
+pwd
 scriptdir = fileparts(fileparts(fileparts(pwd)));
 
 tic
