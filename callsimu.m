@@ -1,5 +1,5 @@
 clear all;
-load('../param.mat');
+load('param.mat');
 scriptdir = fileparts(fileparts(fileparts(pwd)));
 
 tic
