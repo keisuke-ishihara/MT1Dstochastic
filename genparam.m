@@ -1,10 +1,16 @@
-dirname = '20150331_1';
+dirname = '20150401_1';
+
+cd experiments
+
+if exist(dirname) ~= 0
+    rmdir(dirname, 's');    
+end
+
 mkdir(dirname);
 cd(dirname);
 
 clear all;
-
-variation = 0:0.5:2;
+variation = 0:2:6;
 
 for i = 1:length(variation)
    
@@ -31,11 +37,11 @@ for i = 1:length(variation)
 
     global Ni dt;
     dt = 0.04;          % time step for simulation
-    Ni = 100;           % initial number of immortal microtubules at origin
+    Ni = 50;           % initial number of immortal microtubules at origin
 
     global nucrate n_rep
     nucrate = variation(i);        % rate of nucleation
-    n_rep = 5;          % how many simulations to repeat per condition
+    n_rep = 3;          % how many simulations to repeat per condition
 
     J = (v_poly*f_res - v_depoly*f_cat)/(f_cat+f_res);
     D = v_poly*v_depoly/(f_cat+f_res);
@@ -46,6 +52,5 @@ for i = 1:length(variation)
 
 end
 
-clear all
-
-% cd(workingpath);
+cd ..
+cd ..

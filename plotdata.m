@@ -1,37 +1,80 @@
 % this script interacts with simulation data for visualization/analysis
 
-clear all; close all;
+clear all;
 
-datapath = strcat(fileparts(pwd),'/experiments_MT1Dstoch/20150330_1/param1_out/');
+datapath ='20150401_1/';
+datapath = strcat('~/Documents/github/KorolevGroup/MT1Dstochastic/experiments/',datapath);
+% datapath = strcat('~/Dropbox/KorolevGroup/experiments_MT1Dstoch/',datapath);
+% datapath = strcat(fileparts(pwd),'/experiments_MT1Dstoch/20150330_1/param1_out/');
 
 % load list of simulation results
 old = cd(datapath);
-files = dir('*.mat');
-cd(old);
+matfiles = dir('*.mat');
 
 set(0,'DefaultAxesFontSize', 16)
 set(0, 'DefaultFigurePosition', [10 10 600 450]);
 
-%% plot average of simulation to figure
 
-load(strcat(datapath,files(1).name));
-accum = zeros(length(files),length(midpts));
+%% for each param.mat file, plot individual simulations and finally the average
 
-for i4ep = 1:length(files)
+figure(1); hold on
+for i = 1:length(matfiles)
+    
+    load(matfiles(i).name);
+    currmat = matfiles(i).name;
+    cd([currmat(1:end-4), '_out']); 
+    resultmats = dir('result*.mat');
+    accum = zeros(length(resultmats),length(midpts));
+    
+    for j = 1:length(resultmats)
 
-    load(strcat(datapath,files(i4ep).name));
-    MT = result(:,:,end);
-    plusends  = hist(MT(any(MT,2),3),midpts);
-    accum(i4ep,:) = plusends;    
+        load(resultmats(j).name);
+        MT = result(:,:,end);
+        plusends  = hist(MT(any(MT,2),3),midpts);
+        accum(j,:) = plusends;       
+
+    end
+
+    meanplusends = sum(accum, 1)/length(resultmats);
+    
+%     figure(1); hold on;
+%     plot(midpts, accum);
+    plot(midpts, meanplusends, '*');
+%     meanplusends(1:10)
+    cd ..
     
 end
 
-plusendprofile = sum(accum, 1)/length(files);
-
-figure(1); hold on
-plot(midpts, plusendprofile);
+cd(old)
 
 stop
+
+%% plot average of simulation to figure
+% 
+% figure(1); hold on
+% % load(strcat(datapath,matf/iles(1).name));
+% midpts = 2:4:198;
+% accum = zeros(length(matfiles),length(midpts));
+% 
+% for i4ep = 1:length(matfiles)
+% 
+%     load(strcat(datapath,matfiles(i4ep).name));
+%     MT = result(:,:,end);
+%     plusends  = hist(MT(any(MT,2),3),midpts);
+%     accum(i4ep,:) = plusends;    
+%     
+% end
+% 
+% plusendprofile = sum(accum, 1)/length(matfiles);
+% 
+% figure(1); hold on
+% plot(midpts, plusendprofile);
+% 
+% plusendprofile(1:10)
+% 
+% cd(old);
+% 
+% stop
 
 %% for plotting individual simulations
 % for i4ep = 1:100
