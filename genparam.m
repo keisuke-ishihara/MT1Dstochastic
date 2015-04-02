@@ -1,4 +1,4 @@
-dirname = '20150401_1';
+dirname = '20150402_1';
 
 cd experiments
 

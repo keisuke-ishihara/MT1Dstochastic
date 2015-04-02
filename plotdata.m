@@ -2,7 +2,7 @@
 
 clear all;
 
-datapath ='20150401_1/';
+datapath ='20150402_1/';
 datapath = strcat('~/Documents/github/KorolevGroup/MT1Dstochastic/experiments/',datapath);
 % datapath = strcat('~/Dropbox/KorolevGroup/experiments_MT1Dstoch/',datapath);
 % datapath = strcat(fileparts(pwd),'/experiments_MT1Dstoch/20150330_1/param1_out/');
