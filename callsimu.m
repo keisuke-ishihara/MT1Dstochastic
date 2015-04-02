@@ -7,9 +7,9 @@ for i = 1:n_rep
 
     old = cd(scriptdir);
     
-    nucrate
+    % reset the rng seed and start simulation
+    rng shuffle
     [time, result] = MTsimulation();
-	filename = strcat('result',sprintf('%04.0f',i),'.mat');
 
     % display progress of simulation
     out1 = strcat('Simulation', {' '}, num2str(i), ' out of ', {' '}, num2str(n_rep), '.', {' '}); 
@@ -17,7 +17,7 @@ for i = 1:n_rep
     strcat(out1,out2)
     
     cd(old);
+    filename = strcat('result',sprintf('%04.0f',i),'.mat');
     save(filename);
         
 end
-
