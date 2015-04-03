@@ -2,13 +2,14 @@
 
 clear all;
 
-datapath ='20150402_1/';
-datapath = strcat('~/Documents/github/KorolevGroup/MT1Dstochastic/experiments/',datapath);
-% datapath = strcat('~/Dropbox/KorolevGroup/experiments_MT1Dstoch/',datapath);
+datapath1 ='20150403_2/';
+datapath = strcat('~/Documents/github/KorolevGroup/MT1Dstochastic/experiments/',datapath1);
 % datapath = strcat(fileparts(pwd),'/experiments_MT1Dstoch/20150330_1/param1_out/');
 
+xbinwidthplot = 16;
+[grad,im] = colorGradient([0 0.6 1],[1 0.1 0], 5);
 % load list of simulation results
-old = cd(datapath);
+olddir = cd(datapath);
 matfiles = dir('*.mat');
 
 set(0,'DefaultAxesFontSize', 16)
@@ -16,35 +17,40 @@ set(0, 'DefaultFigurePosition', [10 10 600 450]);
 
 %% for each param.mat file, plot individual simulations and finally the average
 
-figure(1); hold on
-for i = 1:length(matfiles)
+figure(1); hold on;
+xlabel('distance [µm]'); ylabel('plus ends per micron'); title(datapath1)
+load(matfiles(1).name);
+midpts4plot = min(midpts):xbinwidthplot:max(midpts);
+
+for imat = 1:length(matfiles)
     
-    load(matfiles(i).name);
-    currmat = matfiles(i).name;
+    load(matfiles(imat).name);
+    currmat = matfiles(imat).name;
     cd([currmat(1:end-4), '_out']);
     resultmats = dir('result*.mat');
-    accum = zeros(length(resultmats),length(midpts));
+    accum = zeros(length(resultmats),length(midpts4plot));
     
     for j = 1:length(resultmats)
 
         load(resultmats(j).name);
         MT = result(:,:,end);
-        plusends  = hist(MT(any(MT,2),3),midpts);
+        plusends  = hist(MT(any(MT,2),3),midpts4plot)/xbinwidthplot;
         accum(j,:) = plusends;       
 
     end
 
     meanplusends = sum(accum, 1)/length(resultmats);
-    
-%     figure(1); hold on;
-%     plot(midpts, accum);
-    plot(midpts, meanplusends, '*');
-%     meanplusends(1:10)
+
+%     if imat == length(matfiles)
+%         plot(midpts4plot, accum, 'o');
+%     end
+%     plot(midpts4plot, meanplusends, '*');
+    errorbar(midpts4plot, meanplusends, std(accum), 'Color', grad(imat,:));
     cd ..
     
 end
 
-cd(old)
+cd(olddir)
 
 stop
 
