@@ -36,11 +36,11 @@ cmap_grow   = [1 1 1; 0 0.5 1];
 cmap_shrink = [1 1 1; 1 0.2 0.1];
 cmap_age    = [0.1 0.8 0.4];
 
-% figure;
-% barh([curr(:,2) curr(:,3)-curr(:,2)],'stacked')
-% colormap(cmap_grow);
-% axis([0 max(midpts) 0 length(curr)])
-% title('length and polymer distribution')
+figure;
+barh([curr(:,2) curr(:,3)-curr(:,2)],'stacked')
+colormap(cmap_grow);
+axis([0 max(midpts) 0 length(curr)])
+title('length and polymer distribution')
 
 % figure;
 % barh(curr(:,4));

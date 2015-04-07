@@ -1,4 +1,4 @@
-dirname = '20150403_2';
+dirname = 'iphase_nonuc';
 
 cd experiments
 
@@ -10,7 +10,7 @@ mkdir(dirname);
 cd(dirname);
 
 clear all;
-variation = 0:2:10;
+variation = 0;
 
 for i = 1:length(variation)
    
@@ -28,24 +28,24 @@ for i = 1:length(variation)
 
     global boundarycondition nucscenario depolyreg;
     boundarycondition = 3;
-    nucscenario = 2;
+    nucscenario = 0;
     depolyreg = 0;
 
     global v_poly v_depoly f_cat f_res;
 %     v_poly   =  8.8;    v_depoly   = 13.7; 
 %     f_cat = 0.05*60;    f_res = 0.006*60;
     
-    % these are fake interphase values 20150403
+%     % these are fake interphase values 20150403
     v_poly   =  12.0;    v_depoly   = 9.3; 
     f_cat = 0.012*60;    f_res = 0.020*60;
 
     global Ni dt;
     dt = 0.04;          % time step for simulation
-    Ni = 50;           % initial number of immortal microtubules at origin
+    Ni = 6000;           % initial number of immortal microtubules at origin
 
     global nucrate n_rep
     nucrate = variation(i);        % rate of nucleation
-    n_rep = 10;          % how many simulations to repeat per condition
+    n_rep = 2;          % how many simulations to repeat per condition
 
     J = (v_poly*f_res - v_depoly*f_cat)/(f_cat+f_res);
     D = v_poly*v_depoly/(f_cat+f_res);
