@@ -6,7 +6,9 @@
 #SBATCH -n 1 # one core
 #SBATCH -N 1 # on one node
 #SBATCH -t 0-2:00 # Running time of 2 hours
-#SBATCH --mem 4000 # Memory request of 4 GB
+#SBATCH --mem 1000 # Memory request of 1 GB
+#SBATCH -o slurm_%A_%a.out # Standard output
+#SBATCH -e slurm_%A_%a.err # Standard error
 
 # this script is called as
 # sbatch --array=1-30 simu_arrays.sbatch
@@ -19,6 +21,7 @@ cd param${SLURM_ARRAY_TASK_ID}_out
 scriptdir=`pwd |sed 's#/[^/]*/[^/]*/[^/]*$##'`  
 #echo $scriptdir
 
+module load math/matlab-R2014b 
 matlab -nojvm -nosplash -nodesktop < $scriptdir/callsimu.m
 
 rm param.mat
