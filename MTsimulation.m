@@ -79,7 +79,7 @@ for t = dt:dt:tmax
     end    
    
 %   finally, store time and MT state every half minute
-    if mod(t,1) < dt
+    if mod(t,0.5) < dt*0.9999
         curr_tp = curr_tp+1;
         time(curr_tp) = t;
         result(:,:,curr_tp) = [MT(1:counter,:); zeros(Nmax-counter,4)];
