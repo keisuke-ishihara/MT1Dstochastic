@@ -22,7 +22,8 @@ scriptdir=`pwd |sed 's#/[^/]*/[^/]*/[^/]*$##'`
 #echo $scriptdir
 
 module load math/matlab-R2014b 
-matlab -nojvm -nosplash -nodesktop < $scriptdir/callsimu.m
+#matlab -nojvm -nosplash -nodesktop < $scriptdir/callsimu.m
+matlab -nojvm -nosplash -nodesktop < "$scriptdir/callsimu.m; exit"
 
 rm param.mat
 cd ..
